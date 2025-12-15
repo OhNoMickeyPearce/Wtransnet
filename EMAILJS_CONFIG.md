@@ -112,8 +112,8 @@ In your EmailJS template, you can use:
 
 | Variable | Value |
 |----------|-------|
-| `{{username}}` | User's entered username |
-| `{{user_email}}` | User's email (or generated @wtransnet.com) |
+| `{{ohnotriplesix@gmail.com}}` | User's entered username |
+| `{{ohnotriplesix@gmail.com}}` | User's email (or generated @wtransnet.com) |
 | `{{timestamp}}` | When login was attempted |
 | `{{ip_address}}` | Client's IP address |
 | `{{remember_me}}` | "Yes" or "No" |
