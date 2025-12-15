@@ -6,7 +6,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+emailjs.init('2zaPUjs8EKeOqaqC9');
 
 const loginForm = document.getElementById('loginForm');
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
